@@ -40,6 +40,7 @@ def logout(request):
 
 
 @view_config(route_name='login', renderer='templates/login.jinja2')
+@view_config(route_name='/', renderer='templates/login.jinja2')
 def login(request):
     '''
     Generates login URL, post-authorization callback URL, and links it from
@@ -86,15 +87,17 @@ def request_form(request):
 
     form = SelectCoursesForm(request.POST, prefix="form")
     form.courseIds.choices = get_courseId_choices(course_list)
+    form.baseCourse.choices = get_baseCourse_choices(course_list, request)
+    add_form = AdditionalCourseForm(request.POST, prefix="add_form")
 
     # Flash message if no courses are found for this semester.
     if form.courseIds.choices == []:
         request.session.flash('No courses were found in D2L for this semester.\
-            Please <a href="http://www.uwosh.edu/d2lfaq/d2l-login">log into \
-            D2L</a> to confirm you have classes in D2L.')
+            Please log into D2L to confirm you have classes this semester.')
         return {'form': form, 'add_form': add_form, 'csrf_token': csrf_token}
-    form.baseCourse.choices = get_baseCourse_choices(course_list, request)
-    add_form = AdditionalCourseForm(request.POST, prefix="add_form")
+        #return {'add_form': add_form, 'csrf_token': csrf_token}
+
+
     if request.method == 'POST':
         if 'Add Class' in request.POST:
             return process_add_class(service_uc, request, form, add_form, semester_code)
