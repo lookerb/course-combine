@@ -292,11 +292,11 @@ def get_baseCourse_choices(course_list, request):
         "/d2l/lp/manageCourses/course_offering_info_viewedit.d2l?ou="
 
     return [(course['courseId'],
+        course['name'] +
+        ", " +
         linkPrefix +
         str(course['courseId']) +
         "'>" +
-        course['name'] +
-        ", " +
         course['parsed'] +
         "</a>") for course in course_list]
 

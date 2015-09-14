@@ -12,12 +12,16 @@
 	font-size: 1.4rem;
 }
 
+.web-app #course {
+	list-style-type: none;
+}
+
 .formHelp {
 	font-size: 1.3rem;
 	padding-left: 25px;
 }
 
-.course ul{
+#course ul{
 	list-style-type: none;
 }
 
