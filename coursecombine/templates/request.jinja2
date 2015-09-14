@@ -6,10 +6,17 @@
 		<h3>Select two or more courses you would like combined into a single course in D2L.</h3>
 		<p><b><a href="#add">A course I want combined is not listed</a></b></p>
 		<p>If you have several combination requests, please submit them separately.</p>
+		<div>{{ form.courseIds.label }}
+			{{ form.courseIds.description }}
+		</div>
 		{{ form.courseIds }}
 		<h3>Which course do you want the other courses added to?</h3>
 		<p>If you've begun developing one of these courses in D2L, that's the one you should select as your base course.</p> 
 		<p>The link for each class opens the D2L course offering info page for that course in a new tab/window.</p>
+
+		<div>{{ form.baseCourse.label }}
+			{{ form.baseCourse.description }}
+		</div>
 		<p>{{ form.baseCourse }}</p>
 	<p><input type="submit" name="Submit Request" value="Submit Request"/></p>
 	</form>

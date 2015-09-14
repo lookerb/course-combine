@@ -6,12 +6,16 @@ from datetime import date
 
 
 class SelectCoursesForm(Form):
-    courseIds = SelectMultipleField('Courses', 
+    courseIds = SelectMultipleField("Which courses would you like combined into a single course in D2L?", 
+        description="Select as many course sections as you want combined into one.",
         widget=widgets.ListWidget(prefix_label=False),
         option_widget=widgets.CheckboxInput(),
         coerce=int,
         validators=[validators.Required(message="You must select at least two courses to combine")])
-    baseCourse = RadioField('Select base course',
+    baseCourse = RadioField('Which course do you want the others added to?',
+        description="Select the course in which you are or will be developing" +\
+            " your course content and materials so that these changes will be" +\
+            " kept after the combination is complete.",
         validators=[validators.Required(message="You must select a course")])
 
 class AdditionalCourseForm(Form):
