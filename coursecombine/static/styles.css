@@ -14,6 +14,7 @@
 
 .web-app ul {
 	list-style-type: none;
+	font-size: 1.3rem;
 }
 
 .formHelp {
@@ -35,9 +36,8 @@ textarea#location.shorterTextArea {
 	margin-left: 25px;
 }
 
-.web-app select#expiration {
-	width: 150px;
-	margin-left: 25px;
+.web-app select#add_form-sessionLength {
+	width: 250px;
 }
 
 .web-app dd {
