@@ -14,7 +14,6 @@ ZODB==4.1.0
 ZODB3==3.11.0
 argparse==1.2.1
 beautifulsoup4==4.3.2
-camtasia-request==0.0
 gevent==1.0.2
 greenlet==0.4.7
 gunicorn==19.3.0

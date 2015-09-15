@@ -1,1 +1,1 @@
-/usr/lib64/python2.7/copy_reg.py
+/home/lookerb/.local/lib/python2.7/copy_reg.py

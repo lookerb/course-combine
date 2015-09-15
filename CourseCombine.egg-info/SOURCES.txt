@@ -17,10 +17,11 @@ coursecombine/auth2.py
 coursecombine/forms.py
 coursecombine/tests.py
 coursecombine/views.py
+coursecombine/static/bg-gradient.jpg
+coursecombine/static/google-cse.gif
 coursecombine/static/pyramid-16x16.png
 coursecombine/static/pyramid.png
 coursecombine/static/styles.css
-coursecombine/static/theme.css
-coursecombine/static/theme.min.css
+coursecombine/static/uwosh.css
+coursecombine/static/wordmark.png
 coursecombine/static/img/TitanWebSample.png
-coursecombine/templates/mytemplate.pt
