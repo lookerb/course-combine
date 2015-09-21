@@ -1,1 +1,1 @@
-/usr/lib64/python2.7/os.py
+/home/lookerb/.local/lib/python2.7/os.py
