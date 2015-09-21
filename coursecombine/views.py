@@ -23,6 +23,7 @@ DEC = 12
 
 parser = SafeConfigParser()
 parser.read('development.ini')
+#parser.read('production.ini')
 
 appContext = d2lauth.fashion_app_context(
     app_id=parser.get('app:main', 'APP_ID'),
