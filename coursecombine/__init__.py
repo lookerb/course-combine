@@ -22,6 +22,7 @@ def main(global_config, **settings):
     config.add_route('/', '/')
     config.add_route('logout', '/logout')
     config.add_route('login', '/login')
+    config.add_route('select-semester','/select-semester')
     config.add_route('request', '/request')
     config.add_route('check', '/check')
     config.add_route('confirmation', '/confirmation')
