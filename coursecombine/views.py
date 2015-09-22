@@ -8,7 +8,7 @@ from ConfigParser import SafeConfigParser
 import requests
 # local modules
 import auth2 as d2lauth
-from forms import SelectCoursesForm, AdditionalCourseForm
+from forms import SelectSemesterForm, SelectCoursesForm, AdditionalCourseForm
 
 # constants for calculating semester code
 BASE_YEAR = 1945
@@ -62,6 +62,22 @@ def login(request):
     return {'auth_url': auth_url, 'csrf_token': str(csrf_token)}
 
 
+@view-config(route_name='select-semester', renderer='templates/semester.jinja2')
+def semester(request):
+    '''
+    Generates form with semester options for user to select.
+    '''
+    form = SelectSemesterForm(request.POST)
+    if 'semester_code' in request.session:
+        request.session.remove('semester_code')
+    if 'courses_to_combine' in request.session:
+        request.session.remove('courses_to_combine')
+    if request.method == "POST":
+        request.session['semester_code'] = get_semester_code(form.semester.data, form.year.data)
+        return HTTPFound(location=request.route_url('request'))
+
+
+
 @view_config(route_name='request', renderer='templates/request.jinja2')
 def request_form(request):
     '''
@@ -78,7 +94,7 @@ def request_form(request):
         uc, service_uc = current_session
     user_data = get_user_data(uc, request)
     store_user_data(request, user_data)
-    semester_code = get_semester_code()
+    semester_code = request.session['semester_code']
     
     if 'course_list' in request.session:
         course_list = request.session['course_list']
@@ -213,26 +229,23 @@ def store_user_data(request, userData):
     request.session['uniqueName'] = 'lookerb'
 
 
-def get_semester_code():
+def get_semester_code(semester, year):
     '''
-    Computes current semester code by today's date.
+    Determines the semester code for UWO courses.
     '''
-    year = date.today().year - BASE_YEAR
-    month = date.today().month
-    if month >= 8 and month <= 12:
-        semester = FALL
-    elif month >= 1 and month <= 5:
-        semester = SPRING
-        year = year - 1
-    else: # month equals/is between 6 & 7
-        semester = SUMMER
-        year = year - 1
-    code = str(year) + semester
-    while len(code) < 4:
-        code = '0' + code
-    # DELETE FOLLOWING LINE FOR PRODUCTION
-    #code = '0685'
-    return code
+    if semester == 'Fall':
+        preceding_digits = year
+        final_digit = FALL
+    if semester == 'Spring':
+        preceding_digits = str(int(year) - 1)
+        final_digit = SPRING
+    if semester == 'Summer':
+        preceding_digits = str(int(year) - 1)
+        final_digit = SUMMER
+    semester_code = preceding_digits + final_digit
+    while len(semester_code) < 4:
+        semester_code = '0' + semester_code
+    return semester_code
 
 
 def get_courses(uc, semester_code, request):
