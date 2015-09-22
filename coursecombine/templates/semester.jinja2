@@ -1,0 +1,14 @@
+{% extends "template.jinja2" %}
+{% block content %}
+	<h2>Select Semester</h2>
+	<form role="form" method="post" action="">
+	<input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+		<p>Please select the desired semester and year from the choices below</p>
+		<div>
+			{{ form.semester }}
+			{{ form.year }}
+		</div>
+		<div>
+			<p><input type="submit" name="Next" /></p>
+	</form>
+{% endblock %}
