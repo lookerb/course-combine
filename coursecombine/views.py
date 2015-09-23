@@ -62,19 +62,31 @@ def login(request):
     return {'auth_url': auth_url, 'csrf_token': str(csrf_token)}
 
 
-@view-config(route_name='select-semester', renderer='templates/semester.jinja2')
+@view_config(route_name='select-semester', renderer='templates/semester.jinja2')
 def semester(request):
     '''
     Generates form with semester options for user to select.
     '''
+    csrf_token = request.session.get_csrf_token()
+
+    current_session = session_exists(request)
+    if not current_session:
+        return HTTPFound(location=request.route_url('login'))
+    else:
+        uc, service_uc = current_session
+    user_data = get_user_data(uc, request)
+    store_user_data(request, user_data)
+
     form = SelectSemesterForm(request.POST)
     if 'semester_code' in request.session:
-        request.session.remove('semester_code')
+        request.session.pop('semester_code')
+
     if 'courses_to_combine' in request.session:
-        request.session.remove('courses_to_combine')
+        request.session.pop('courses_to_combine')
     if request.method == "POST":
         request.session['semester_code'] = get_semester_code(form.semester.data, form.year.data)
         return HTTPFound(location=request.route_url('request'))
+    return {'form': form, 'csrf_token': csrf_token}
 
 
 
@@ -96,7 +108,7 @@ def request_form(request):
     store_user_data(request, user_data)
     semester_code = request.session['semester_code']
     
-    if 'course_list' in request.session:
+    if 'course_list' in request.session and request.session['course_list'] != []:
         course_list = request.session['course_list']
     else:
         request.session['course_list'] = course_list = \
@@ -197,7 +209,7 @@ def session_exists(request):
             service_uc.user_key = request.registry.settings['USER_KEY']
             return uc, service_uc
         except KeyError:
-            session.flash('Please login.')
+            request.session.flash('Please login.')
             return False
 
 def logged_in(request):
