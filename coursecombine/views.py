@@ -121,8 +121,11 @@ def request_form(request):
 
     # Flash message if no courses are found for this semester.
     if form.courseIds.choices == []:
-        request.session.flash('No courses were found in D2L for this semester.\
-            Please log into D2L to confirm you have classes this semester.')
+        selected_semester = get_season_year(semester_code)
+        request.session.flash('No courses were found in D2L for the ' +\
+            selected_semester + ' semester. Please log into D2L to confirm ' +\
+            'you have classes this semester, or add classes from Titan Web ' +\
+            'using the form below.')
         return {'form': form, 'add_form': add_form, 'csrf_token': csrf_token}
         #return {'add_form': add_form, 'csrf_token': csrf_token}
 
@@ -266,9 +269,9 @@ def get_current_semester():
     '''
     year = date.today().year - BASE_YEAR
     month = date.today().month
-    if month >= 8 and month <= 12:
+    if month >= AUG and month <= DEC:
         semester = FALL
-    elif month >= 1 and month <= 5:
+    elif month >= JAN and month <= MAY:
         semester = SPRING
         year = year - 1
     else: # month equals/is between 6 & 7
@@ -278,6 +281,24 @@ def get_current_semester():
     while len(code) < 4:
         code = '0' + code
     return code
+
+
+def get_season_year(semester_code):
+    season = semester_code[-1]
+    year = semester_code[:-1]
+    if season == FALL:
+        season = "Fall"
+        year = int(year)
+    if season == SPRING:
+        season = "Spring"
+        year = int(year) + 1
+    if season == SUMMER:
+        season = "Summer"
+        year = int(year) + 1
+    year = str(year + BASE_YEAR)
+    print("CODE", semester_code)
+    print("SEMESTER", season + " " + year)
+    return season + " " + year
 
 
 def get_courses(uc, semester_code, request):
