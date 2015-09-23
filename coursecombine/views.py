@@ -84,7 +84,11 @@ def semester(request):
     if 'courses_to_combine' in request.session:
         request.session.pop('courses_to_combine')
     if request.method == "POST":
-        request.session['semester_code'] = get_semester_code(form.semester.data, form.year.data)
+        semester_code = get_semester_code(form.semester.data, form.year.data)
+        if int(get_current_semester()) > int(semester_code):
+            request.session.flash('Please select the current or next semester.')
+            return {'form': form, 'csrf_token': csrf_token} 
+        request.session['semester_code'] = semester_code
         return HTTPFound(location=request.route_url('request'))
     return {'form': form, 'csrf_token': csrf_token}
 
@@ -108,11 +112,7 @@ def request_form(request):
     store_user_data(request, user_data)
     semester_code = request.session['semester_code']
     
-    if 'course_list' in request.session and request.session['course_list'] != []:
-        course_list = request.session['course_list']
-    else:
-        request.session['course_list'] = course_list = \
-            get_courses(service_uc, semester_code, request)
+    request.session['course_list'] = course_list = get_courses(service_uc, semester_code, request)
 
     form = SelectCoursesForm(request.POST, prefix="form")
     form.courseIds.choices = get_courseId_choices(course_list)
@@ -258,6 +258,26 @@ def get_semester_code(semester, year):
     while len(semester_code) < 4:
         semester_code = '0' + semester_code
     return semester_code
+
+
+def get_current_semester():
+    '''
+    Computes current semester code by today's date.
+    '''
+    year = date.today().year - BASE_YEAR
+    month = date.today().month
+    if month >= 8 and month <= 12:
+        semester = FALL
+    elif month >= 1 and month <= 5:
+        semester = SPRING
+        year = year - 1
+    else: # month equals/is between 6 & 7
+        semester = SUMMER
+        year = year - 1
+    code = str(year) + semester
+    while len(code) < 4:
+        code = '0' + code
+    return code
 
 
 def get_courses(uc, semester_code, request):
