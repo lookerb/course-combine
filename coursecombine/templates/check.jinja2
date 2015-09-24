@@ -1,3 +1,4 @@
+
 {% extends "template.jinja2" %}
 {% block content %}
 	<h2>Just a Quick Double Check...</h2>
@@ -8,6 +9,6 @@
 			<ul>{% for row in coursesToCombine %}
 			<li>{{ row['parsed'] }}, {{ row['name'] }}</li>
 			{% endfor %}</ul>
-        <p><a href="/confirmation">Yes, that's the combination I want made.</a></p>
-        <p><a href="/request">No, I had a clicking accident.</a></p>
+        <p><a href="{{ request.route_path('confirmation') }}">Yes, that's the combination I want made.</a></p>
+        <p><a href="{{ request.route_path('request') }}">No, I had a clicking accident.</a></p>
 {% endblock %}
