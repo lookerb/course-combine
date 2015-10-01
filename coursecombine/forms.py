@@ -27,7 +27,8 @@ class SelectCoursesForm(Form):
     baseCourse = RadioField('Which course do you want the others added to?',
         description="Select the course in which you are or will be developing" +\
             " your course content and materials so that these changes will be" +\
-            " kept after the combination is complete.",
+            " kept after the combination is complete. The links after each course" +\
+            " will open its D2L page so that you can be sure to pick the right one.",
         validators=[validators.Required(message="You must select a course")])
 
 class AdditionalCourseForm(Form):
