@@ -247,6 +247,11 @@ def store_user_data(request, userData):
 def get_semester_code(semester, year):
     '''
     Determines the semester code for UWO courses.
+    Called with data from the SelectSemesterForm. 
+    Semester is a string value representing one of our semesters--this
+     determines the final digit of the code.
+    Year is an integer value equal to 1945 subtracted from the year selected
+     in the form--this determines the digits before the final digit.
     '''
     if semester == 'Fall':
         preceding_digits = year
@@ -397,6 +402,7 @@ def update_base_course(baseCourse, baseCourseData, course_list):
 def get_course(uc, code, request):
     '''
     Gets course information for supplied code from D2L.
+    http://docs.valence.desire2learn.com/res/orgunit.html#get--d2l-api-lp-(version)-orgstructure-
     '''
     myUrl = uc.create_authenticated_url('/d2l/api/lp/{0}/orgstructure/'.format(request.registry.settings['VER']))
     kwargs = {'params': {}}
