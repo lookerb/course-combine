@@ -284,6 +284,10 @@ def get_current_semester():
 
 
 def get_season_year(semester_code):
+    '''
+    Returns string of Semester Year (ex: Fall 2015) from four-digit semester code. 
+    For use in flash message when no courses found for given semester.
+    '''
     season = semester_code[-1]
     year = semester_code[:-1]
     if season == FALL:
@@ -296,14 +300,13 @@ def get_season_year(semester_code):
         season = "Summer"
         year = int(year) + 1
     year = str(year + BASE_YEAR)
-    print("CODE", semester_code)
-    print("SEMESTER", season + " " + year)
     return season + " " + year
 
 
 def get_courses(uc, semester_code, request):
     '''
     Creates list of courses with same semester code.
+    http://docs.valence.desire2learn.com/res/enroll.html#get--d2l-api-lp-(version)-enrollments-users-(userId)-orgUnits-
     '''
     myUrl = uc.create_authenticated_url(
         '/d2l/api/lp/{0}/enrollments/users/{1}/orgUnits/'.format(
